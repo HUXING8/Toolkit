@@ -1,13 +1,21 @@
 # Apollo Map
 
+- [简介](#简介)
+- [地图格式](#地图格式)
+  - [hd_map](#🗺️hd_map)
+  - [routing_map](#🗺️routing_map)
+  - [pnc_map](#🗺️pnc_map)
+- [地图转换](#地图转换)
+- [可视化](#地图格式)
+
 ## 简介
 * Apollo中的地图有**hd_map**,**routing_map**,**pnc_map**等，所有子模块下的地图(如routing_map)皆由原始的hd_map生成。
 * base_map中的字段为**Apollo Opendrive**格式。
 
 ## 地图格式
 
-### **hd_map**
-Apollo中可以读取`.xml`和`.pb`格式的地图文件，读取地图的函数位于工程下的"modules/map/hdmap/hdmap_impl.h"，在其类`HDMapImpl`的中创建了以proto文件创建了初始map格式的成员变量`map`，其字段如下所示：
+### 🗺️**hd_map**
+Apollo中可以读取`.xml`和`.pb`格式的地图文件，读取地图的函数位于工程下的"modules/map/hdmap/hdmap_impl.h"，在其类`HDMapImpl`的中创建了protobuf格式的成员变量`map`，其字段如下所示：
 ```
 // 位于modules/common_msgs/map_msgs
 message Map {
@@ -124,23 +132,25 @@ message Map {
 Apollo通过`HDMapImpl`中不同的函数进行读取hd_map，根据参数格式进行选择：
 ```
 // map_filename为本地地图文件路径
-int HDMapImpl::LoadMapFromFile(string & map_filename)
+int HDMapImpl::LoadMapFromFile(string& map_filename)
 
 //map_proto为一个protobuf格式的消息
-int HDMapImpl::LoadMapFromProto(Map & map_proto)
+int HDMapImpl::LoadMapFromProto(Map& map_proto)
 ```
 
 `LaneInfo`类位于modules/map/hdmap/hdmap_common.h中，其中包括计算航向角、曲率、投影点、ST坐标等的功能函数。从map_lane.pb的`Lane`信息转化到`LaneInfo`在其构造函数中。
 ```
-LaneInfo::LaneInfo(const Lane &lane) : lane_(lane) { Init(); }
+LaneInfo::LaneInfo(const Lane& lane) : lane_(lane) { Init(); }
 ```
 Init()函数中初始化了`LaneInfo`中的segment_,accumulated_s_,unit_directions_,heading_变量，即车道离散中心线的线段、累积s长度，单位向量，航向角的数据，并在最后调用类内函数CreateKDTree()进行KDTree的构建，便于后续道路段segment的搜索。
 
-### **routing_map**
+### 🗺️**routing_map**
 routing地图主要依靠一个TopoGraph来进行实现，将hd_map中的道路设置为Node，车道与车道之间的连接设置为Edge。<br>
 <br>
 topo_graph在"modules/routing/graph/topo_graph.h"中的`TopoGraph`类中进行初始化实现，其中含有`TopoNode`和`TopoEdge`的数组变量来存储拓扑图中的结点和边，使用类内函数LoadNodes(Graph& graph)和LoadEdges(Graph& graph)进行获取。<br>
+<br>
 其中的`Graph`数据为protobuf格式，字段来自"modules/routing/proto/topo_graph.proto"，具体内容如下：
+
 ```
 message Node {
   optional string lane_id = 1;
@@ -172,8 +182,14 @@ message Graph {
   repeated Edge edge = 4;
 }
 ```
+
 graph的首次初始化位于"modules/routing/core/navigator.h"中的`Navigator`类中，该类为拓扑图的导航类，实现routing的路线搜索。<br>
+<br>
 在Navigator的构造函数Navigator(const string& topo_file_path)中，参数输入为topo_graph的本地文件路径，函数内调用GetProtoFromFile()来获取本地文件中的graph信息，并使用一个TopoGraph类的类内变量graph_，调用其LoadGraph()来初始化各结点和边信息。
+
+### 🗺️**pnc_map**
+`pnc_map`是Planning中的依据地图，在工程中创建了类`PncMap`，位于"modules/map/pnc_map/pnc_map.h"，主要用于后续规划时的参考线提供。
+
 
 ## 地图转换
 将**OpenDrive**格式的地图转换成**Apollo Opendrive**格式 [imap](https://github.com/daohu527/imap)
