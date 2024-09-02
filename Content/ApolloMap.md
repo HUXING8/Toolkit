@@ -144,6 +144,8 @@ LaneInfo::LaneInfo(const Lane& lane) : lane_(lane) { Init(); }
 ```
 Init()函数中初始化了`LaneInfo`中的segment_,accumulated_s_,unit_directions_,heading_变量，即车道离散中心线的线段、累积s长度，单位向量，航向角的数据，并在最后调用类内函数CreateKDTree()进行KDTree的构建，便于后续道路段segment的搜索。
 
+---
+
 ### 🗺️**routing_map**
 routing地图主要依靠一个TopoGraph来进行实现，将hd_map中的道路设置为Node，车道与车道之间的连接设置为Edge。<br>
 <br>
@@ -187,9 +189,12 @@ graph的首次初始化位于"modules/routing/core/navigator.h"中的`Navigator`
 <br>
 在Navigator的构造函数Navigator(const string& topo_file_path)中，参数输入为topo_graph的本地文件路径，函数内调用GetProtoFromFile()来获取本地文件中的graph信息，并使用一个TopoGraph类的类内变量graph_，调用其LoadGraph()来初始化各结点和边信息。
 
+---
+
 ### 🗺️**pnc_map**
 `pnc_map`是Planning中的依据地图，在工程中创建了类`PncMap`，位于"modules/map/pnc_map/pnc_map.h"，主要用于后续规划时的参考线提供。
 
+---
 
 ## 地图转换
 将**OpenDrive**格式的地图转换成**Apollo Opendrive**格式 [imap](https://github.com/daohu527/imap)
@@ -197,5 +202,6 @@ graph的首次初始化位于"modules/routing/core/navigator.h"中的`Navigator`
 ## 可视化
 * `.xml`格式地图文件可视化 [Apollo opendrive xml格式高精地图解析引擎](https://github.com/chenyongzhe/HdmapEngine) 
 * `.txt`格式地图文件可视化 [Apollo_txt地图可视化](https://github.com/HUXING8/Apollo-Map-Read)
+* `.bin`格式地图文件可视化 [Apollo hp-map-viewer](https://ntutangyun.github.io/apollo-hd-map-viewer/)
 
 ⬅️[返回](../ReadMe.md)
