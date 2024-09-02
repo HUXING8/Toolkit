@@ -9,7 +9,7 @@
 
 ## 字体
 使用HTML的标记方法来实现字体的样式、颜色、大小的转换：
-```
+```html
 <font face="楷体">我是楷体</font>
 <font color=blue>蓝色</font>
 <font color=#008000>绿色</font>
@@ -43,6 +43,16 @@
 ## 目录索引
 1. 自动生成目录：使用`[TOC]`，但不是所有的MarkDown处理器都支持自动生成目录；
 2. 手动生成目录：在文本中使用了`#`来创建各标题后，再使用`[符号](#符号)`，效果为[符号](#符号)；
+
+## 数学公式
+* 使用`$$`字符来创建LateX格式的数学表达式，例如：
+$$
+\mathbf{V}_1 \times \mathbf{V}_2 =  \begin{vmatrix} 
+\mathbf{i} & \mathbf{j} & \mathbf{k} \\
+\frac{\partial X}{\partial u} &  \frac{\partial Y}{\partial u} & 0 \\
+\frac{\partial X}{\partial v} &  \frac{\partial Y}{\partial v} & 0 \\
+\end{vmatrix}
+$$
 
 ## 实用软件
 * Typora免费版 [Typora_0.11.18](https://github.com/zogodo/typora-0.11.18)

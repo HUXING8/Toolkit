@@ -11,4 +11,4 @@
 | [OpenDrive](./Content/OpenDrive.md)   |OpenDrive地图字段讲解和可视化              |
 | [Carla](./Content/Carla.md)           |Carla下载                                  |
 | [Apollo](./Content/Apollo.md)         |Apollo工程源码和算法注解                   |
-| [Path](./Content/Path.md)             |路径搜索算法                               |
+| [Navigation](./Content/Navigation.md)             |路径搜索算法                               |
